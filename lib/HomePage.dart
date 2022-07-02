@@ -22,10 +22,10 @@ class _HomePageState extends State<HomePage> {
   // Model Yüklendi
   loadModel() async {
     await Tflite.loadModel(
-        model: "assets/tflite/rps.tflite",
-        labels: "assets/tflite/labels.txt",
-        numThreads: 1,
-        useGpuDelegate: true);
+      model: "assets/tflite/rps.tflite",
+      labels: "assets/tflite/labels.txt",
+      numThreads: 1,
+    );
   }
 
   initCamera() {
@@ -89,30 +89,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      backgroundColor: scaffoldBlack,
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: size.height * 0.5,
-              child: AspectRatio(
-                aspectRatio: cameraController!.value.aspectRatio,
-                child: CameraPreview(cameraController!),
+    return imgCamera == null
+        ? Center(
+            child: CircularProgressIndicator(color: primaryOrange),
+          )
+        : Scaffold(
+            backgroundColor: scaffoldBlack,
+            body: SafeArea(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: size.height * 0.5,
+                    child: AspectRatio(
+                      aspectRatio: cameraController!.value.aspectRatio,
+                      child: CameraPreview(cameraController!),
+                    ),
+                  ),
+                  Text(
+                    _currentRecognition[0]['label'],
+                    style: TextStyle(color: primaryOrange, fontSize: 22),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              _currentRecognition.first['label'].toString(),
-              style: TextStyle(color: primaryOrange),
-            )
-          ],
-        ),
-      )),
-    );
+            )),
+          );
   }
 }
