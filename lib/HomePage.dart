@@ -1,6 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:rps_game_tflite/Core/Configuration.dart';
+import 'package:rps_game_tflite/core/Configuration.dart';
+import 'package:tflite/tflite.dart';
+
+import 'main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,27 +13,102 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  CameraController? cameraController;
+  CameraImage? imgCamera;
+
+  bool isWorking = false;
+  List<dynamic> _currentRecognition = [];
+
+  // Model Yüklendi
+  loadModel() async {
+    await Tflite.loadModel(
+        model: "assets/tflite/rps.tflite",
+        labels: "assets/tflite/labels.txt",
+        numThreads: 1,
+        useGpuDelegate: true);
+  }
+
+  initCamera() {
+    cameraController =
+        CameraController(cameras![1], ResolutionPreset.low, enableAudio: false);
+    cameraController!.initialize().then((value) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        cameraController!.startImageStream((imageFromStream) => {
+              if (!isWorking)
+                {
+                  isWorking = true,
+                  imgCamera = imageFromStream,
+                  runModelOnStreamFrames(),
+                }
+            });
+      });
+    });
+  }
+
+  runModelOnStreamFrames() async {
+    if (imgCamera != null) {
+      var recognitions = await Tflite.runModelOnFrame(
+        bytesList: imgCamera!.planes.map((plane) {
+          return plane.bytes;
+        }).toList(),
+        imageHeight: imgCamera!.height,
+        imageWidth: imgCamera!.width,
+        imageMean: 127.5,
+        imageStd: 127.5,
+        numResults: 1,
+        threshold: 0.1,
+        asynch: true,
+      );
+
+      setState(() {
+        _currentRecognition = recognitions!;
+      });
+      isWorking = false;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initCamera();
+    loadModel();
+  }
+
+  @override
+  void dispose() async {
+    // TODO: implement dispose
+    super.dispose();
+    await Tflite.close();
+    cameraController?.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isWorking = false;
     Size size = MediaQuery.of(context).size;
-    CameraController? cameraController;
-    CameraImage? imgCamera;
 
-    loadModel()
     return Scaffold(
-      backgroundColor: ScaffoldBlack,
+      backgroundColor: scaffoldBlack,
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 34, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 100,
-              height: 100,
-              color: Colors.red,
+              height: size.height * 0.5,
+              child: AspectRatio(
+                aspectRatio: cameraController!.value.aspectRatio,
+                child: CameraPreview(cameraController!),
+              ),
+            ),
+            Text(
+              _currentRecognition.first['label'].toString(),
+              style: TextStyle(color: primaryOrange),
             )
           ],
         ),

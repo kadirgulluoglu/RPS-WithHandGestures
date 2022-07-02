@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
 
-Color PrimaryOrange = Color(0xffED910A);
-Color ScaffoldBlack = Color(0xff222224);
+Color primaryOrange = Color(0xffED910A);
+Color scaffoldBlack = Color(0xff222224);
