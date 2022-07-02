@@ -1,18 +1,22 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:rps_game_tflite/core/Configuration.dart';
+import 'package:rps_game_tflite/utils/Game.dart';
 import 'package:tflite/tflite.dart';
 
+import 'GamePage.dart';
 import 'main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String choice = "Kadir Güllüoğlu";
   CameraController? cameraController;
   CameraImage? imgCamera;
 
@@ -111,11 +115,41 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Text(
                     _currentRecognition[0]['label'],
-                    style: TextStyle(color: primaryOrange, fontSize: 22),
+                    style: TextStyle(color: primaryOrange, fontSize: 25),
                   ),
+                  SizedBox(height: size.height * .05),
+                  Text(
+                    timeLeft.toString(),
+                    style: TextStyle(
+                      fontSize: 55,
+                      color: primaryOrange,
+                    ),
+                  ),
+                  MaterialButton(
+                    onPressed: _startCounterDown,
+                    child: Text(
+                      "START",
+                      style: TextStyle(fontSize: 55, color: Colors.white),
+                    ),
+                  )
                 ],
               ),
             )),
           );
+  }
+
+  int timeLeft = 3;
+  void _startCounterDown() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+      } else {
+        timer.cancel();
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GamePage(Choice(choice))));
+      }
+    });
   }
 }
