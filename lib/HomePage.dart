@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String choice = "Kadir Güllüoğlu";
+  String choice = "";
   CameraController? cameraController;
   CameraImage? imgCamera;
 
@@ -69,6 +69,7 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         _currentRecognition = recognitions!;
+        choice = _currentRecognition[0]['label'];
       });
       isWorking = false;
     }
