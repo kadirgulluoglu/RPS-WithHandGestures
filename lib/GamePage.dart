@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rps_game_tflite/HomePage.dart';
 import 'package:rps_game_tflite/utils/Game.dart';
 
 import 'core/Configuration.dart';
@@ -87,6 +88,16 @@ class _GamePageState extends State<GamePage> {
                     color: Colors.white,
                     fontSize: 30,
                     fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: RaisedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                child: Text("Tekrar Oyna"),
               ),
             ),
           ],
