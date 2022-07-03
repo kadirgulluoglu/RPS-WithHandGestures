@@ -13,32 +13,85 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
-    String PlayerChoice = widget.gameChoice.type.toString();
-    String? Choice;
-    switch (PlayerChoice) {
+    String? RobotChoice = Game.randomChoice();
+    String? PlayerChoicePath;
+    String? RobotChoicePath;
+
+    switch (RobotChoice) {
       case "Taş":
-        Choice = "";
+        RobotChoicePath = "assets/images/rock.png";
         break;
       case "Kağıt":
-        Choice = "";
+        RobotChoicePath = "assets/images/paper.png";
         break;
       case "Makas":
-        Choice = "";
+        RobotChoicePath = "assets/images/scissors.png";
         break;
+    }
+    switch (widget.gameChoice.type) {
+      case "Taş":
+        PlayerChoicePath = "assets/images/rock.png";
+        break;
+      case "Kağıt":
+        PlayerChoicePath = "assets/images/paper.png";
+        break;
+      case "Makas":
+        PlayerChoicePath = "assets/images/scissors.png";
+        break;
+    }
+
+    if (Choice.gameRule[widget.gameChoice.type]![RobotChoice] == "Kazandın") {
+      setState(() {
+        Game.score++;
+      });
     }
     return Scaffold(
       backgroundColor: scaffoldBlack,
       body: SafeArea(
-        child: Center(
-          child: Text(
-            PlayerChoice,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 65,
+          child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(flex: 5, child: Image.asset(PlayerChoicePath!)),
+                  Expanded(
+                      flex: 2,
+                      child: Text("VS",
+                          style: TextStyle(color: Colors.white, fontSize: 45))),
+                  Expanded(flex: 5, child: Image.asset(RobotChoicePath!)),
+                ],
+              ),
             ),
-          ),
+            Spacer(flex: 1),
+            Expanded(
+              flex: 5,
+              child: Text(
+                Choice.gameRule[widget.gameChoice.type]![RobotChoice]
+                    .toString(),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Text(
+                "SKOR: " + Game.score.toString(),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ),
-      ),
+      )),
     );
   }
 }

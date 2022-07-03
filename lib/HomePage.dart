@@ -130,7 +130,8 @@ class _HomePageState extends State<HomePage> {
                     onPressed: _startCounterDown,
                     child: Text(
                       "START",
-                      style: TextStyle(fontSize: 55, color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 55, color: Colors.white, letterSpacing: 3),
                     ),
                   )
                 ],

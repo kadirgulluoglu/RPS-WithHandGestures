@@ -1,6 +1,13 @@
+import 'dart:math';
+
 class Game {
   static int score = 0;
   static List<String> choices = ["Taş", "Kağıt", "Makas"];
+  static String? randomChoice() {
+    Random random = new Random();
+    int robotChoice = random.nextInt(3);
+    return choices[robotChoice];
+  }
 }
 
 class Choice {
