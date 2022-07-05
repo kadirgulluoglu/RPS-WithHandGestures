@@ -23,6 +23,22 @@ class _HomePageState extends State<HomePage> {
   bool isWorking = false;
   List<dynamic> _currentRecognition = [];
 
+  //sayaç
+  int timeLeft = 3;
+  void _startCounterDown() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+      } else {
+        timer.cancel();
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GamePage(Choice(choice))));
+      }
+    });
+  }
+
   // Model Yüklendi
   loadModel() async {
     await Tflite.loadModel(
@@ -52,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+// tflite run
   runModelOnStreamFrames() async {
     if (imgCamera != null) {
       var recognitions = await Tflite.runModelOnFrame(
@@ -107,17 +124,8 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: size.height * 0.5,
-                    child: AspectRatio(
-                      aspectRatio: cameraController!.value.aspectRatio,
-                      child: CameraPreview(cameraController!),
-                    ),
-                  ),
-                  Text(
-                    _currentRecognition[0]['label'],
-                    style: TextStyle(color: primaryOrange, fontSize: 25),
-                  ),
+                  Camera(size),
+                  TextGelenSonuc(),
                   SizedBox(height: size.height * .05),
                   Text(
                     timeLeft.toString(),
@@ -140,18 +148,20 @@ class _HomePageState extends State<HomePage> {
           );
   }
 
-  int timeLeft = 3;
-  void _startCounterDown() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timeLeft > 0) {
-        setState(() {
-          timeLeft--;
-        });
-      } else {
-        timer.cancel();
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => GamePage(Choice(choice))));
-      }
-    });
+  Text TextGelenSonuc() {
+    return Text(
+      _currentRecognition[0]['label'],
+      style: TextStyle(color: primaryOrange, fontSize: 25),
+    );
+  }
+
+  Container Camera(Size size) {
+    return Container(
+      height: size.height * 0.5,
+      child: AspectRatio(
+        aspectRatio: cameraController!.value.aspectRatio,
+        child: CameraPreview(cameraController!),
+      ),
+    );
   }
 }
