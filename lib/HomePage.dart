@@ -26,15 +26,28 @@ class _HomePageState extends State<HomePage> {
   //sayaç
   int timeLeft = 3;
   void _startCounterDown() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(milliseconds: 600), (timer) {
       if (timeLeft > 0) {
         setState(() {
           timeLeft--;
         });
       } else {
         timer.cancel();
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => GamePage(Choice(choice))));
+        showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          transitionDuration: Duration(microseconds: 200),
+          pageBuilder: (
+            BuildContext context,
+            Animation first,
+            Animation second,
+          ) {
+            return GamePage(Choice(choice));
+          },
+        );
+        timeLeft = 3;
       }
     });
   }
@@ -124,6 +137,21 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text(
+                    "SKOR: " + Game.score.toString(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "YÜKSEK SKOR: " + Game.highScore.toString(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: size.height * .05),
                   Camera(size),
                   TextGelenSonuc(),
                   SizedBox(height: size.height * .05),
@@ -141,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           fontSize: 55, color: Colors.white, letterSpacing: 3),
                     ),
-                  )
+                  ),
                 ],
               ),
             )),

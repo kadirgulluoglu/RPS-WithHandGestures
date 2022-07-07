@@ -2,6 +2,7 @@ import 'dart:math';
 
 class Game {
   static int score = 0;
+  static int highScore = 0;
   static List<String> choices = ["Taş", "Kağıt", "Makas"];
   static String? randomChoice() {
     Random random = new Random();

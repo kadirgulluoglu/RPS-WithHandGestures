@@ -45,6 +45,12 @@ class _GamePageState extends State<GamePage> {
       setState(() {
         Game.score++;
       });
+      if (Game.score > Game.highScore) {
+        Game.highScore = Game.score;
+      }
+    } else if (Choice.gameRule[widget.gameChoice.type]![RobotChoice] ==
+        "Kaybettin") {
+      Game.score = 0;
     }
     return Scaffold(
       backgroundColor: scaffoldBlack,
@@ -94,8 +100,7 @@ class _GamePageState extends State<GamePage> {
               flex: 2,
               child: RaisedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  Navigator.pop(context);
                 },
                 child: Text("Tekrar Oyna"),
               ),
