@@ -1,8 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rps_game_tflite">
    <application
-        android:label="rps_game_tflite"
-        android:name="${applicationName}"
+        android:label="RPS Game Hand Gestures"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
