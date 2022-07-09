@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rps_game_tflite/HomePage.dart';
 import 'package:rps_game_tflite/utils/Game.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/Configuration.dart';
+import 'core/simple_preferences.dart';
 
 class GamePage extends StatefulWidget {
   GamePage(this.gameChoice, {Key? key}) : super(key: key);
@@ -12,6 +13,18 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  late SharedPreferences _preferences;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getHighScore();
+  }
+
+  void getHighScore() async {
+    _preferences = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     String? RobotChoice = Game.randomChoice();
@@ -47,11 +60,13 @@ class _GamePageState extends State<GamePage> {
       });
       if (Game.score > Game.highScore) {
         Game.highScore = Game.score;
+        SimplePreferences.setHighScore(Game.highScore);
       }
     } else if (Choice.gameRule[widget.gameChoice.type]![RobotChoice] ==
         "Kaybettin") {
       Game.score = 0;
     }
+
     return Scaffold(
       backgroundColor: scaffoldBlack,
       body: SafeArea(
