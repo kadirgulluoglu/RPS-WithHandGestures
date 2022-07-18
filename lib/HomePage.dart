@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   CameraImage? imgCamera;
 
   bool isWorking = false;
-  List<dynamic> _currentRecognition = [];
+  late List<dynamic> _currentRecognition = [];
 
   //sayaç
   int timeLeft = 3;
@@ -133,44 +133,60 @@ class _HomePageState extends State<HomePage> {
             body: SafeArea(
                 child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "SKOR: " + Game.score.toString(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "YÜKSEK SKOR: " + Game.highScore.toString(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: size.height * .05),
-                  Camera(size),
-                  TextGelenSonuc(),
-                  SizedBox(height: size.height * .05),
-                  Text(
-                    timeLeft.toString(),
-                    style: TextStyle(
-                      fontSize: 55,
-                      color: primaryOrange,
+              child: Center(
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "SKOR: " + Game.score.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  MaterialButton(
-                    onPressed: _startCounterDown,
-                    child: Text(
-                      "START",
-                      style: TextStyle(
-                          fontSize: 55, color: Colors.white, letterSpacing: 3),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "YÜKSEK SKOR: " + Game.highScore.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                ],
+                    Spacer(flex: 1),
+                    Expanded(flex: 5, child: Camera(size)),
+                    Expanded(flex: 1, child: TextGelenSonuc()),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        timeLeft.toString(),
+                        style: TextStyle(
+                          fontSize: 55,
+                          color: primaryOrange,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: MaterialButton(
+                        onPressed: _startCounterDown,
+                        child: Text(
+                          "START",
+                          style: TextStyle(
+                              fontSize: 55,
+                              color: Colors.white,
+                              letterSpacing: 3),
+                        ),
+                      ),
+                    ),
+                    Spacer(
+                      flex: 1,
+                    )
+                  ],
+                ),
               ),
             )),
           );

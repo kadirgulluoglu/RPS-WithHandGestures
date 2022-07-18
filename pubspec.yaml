@@ -19,6 +19,8 @@ dependencies:
   camera: ^0.9.8+1
   # splash screen
   flutter_native_splash: ^2.1.6
+  #high score save device with shared preference
+  shared_preferences:
 
 
 

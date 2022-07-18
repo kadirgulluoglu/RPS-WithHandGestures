@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:rps_game_tflite/core/simple_preferences.dart';
+import 'package:rps_game_tflite/utils/Game.dart';
 
 import 'HomePage.dart';
 
@@ -8,6 +10,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
   final firstcamera = cameras!.first;
+  await SimplePreferences.init();
+  Game.highScore = SimplePreferences.getHighScore() ?? 0;
   runApp(const MyApp());
 }
 

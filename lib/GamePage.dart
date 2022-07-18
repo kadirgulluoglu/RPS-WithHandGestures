@@ -66,26 +66,56 @@ class _GamePageState extends State<GamePage> {
         "Kaybettin") {
       Game.score = 0;
     }
+    Color resultColor(String result) {
+      if (result == "Kazandın")
+        return Colors.green;
+      else if (result == "Kaybettin")
+        return Colors.redAccent;
+      else
+        return Colors.white;
+    }
 
+    String result =
+        Choice.gameRule[widget.gameChoice.type]![RobotChoice].toString();
     return Scaffold(
       backgroundColor: scaffoldBlack,
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               flex: 10,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(flex: 5, child: Image.asset(PlayerChoicePath!)),
+                  Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          Image.asset(PlayerChoicePath!),
+                          Text(
+                            "Sen",
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                        ],
+                      )),
                   Expanded(
                       flex: 2,
                       child: Text("VS",
-                          style: TextStyle(color: Colors.white, fontSize: 45))),
-                  Expanded(flex: 5, child: Image.asset(RobotChoicePath!)),
+                          style:
+                              TextStyle(color: primaryOrange, fontSize: 45))),
+                  Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          Image.asset(RobotChoicePath!),
+                          Text(
+                            "Rakip",
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -93,10 +123,9 @@ class _GamePageState extends State<GamePage> {
             Expanded(
               flex: 5,
               child: Text(
-                Choice.gameRule[widget.gameChoice.type]![RobotChoice]
-                    .toString(),
+                result,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: resultColor(result),
                     fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
