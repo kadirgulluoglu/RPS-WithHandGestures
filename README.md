@@ -1,2 +1,2 @@
-# RPS-WithHandGestures (the project continues)
+# RPS-WithHandGestures
 ## Rock paper Scissors game with Hand Gestures Flutter
